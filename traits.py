@@ -1,0 +1,27 @@
+#Dictionary of Traits and their activation thresholds
+activation_thresholds = {
+  "8-Bit": 2,
+  "Country": 3,
+  "Disco": 3,
+  "EDM": 3,
+  "Emo": 2,
+  "HEARTSTEEL": 3,
+  "K/DA": 3,
+  "Pentakill": 3,
+  "Punk": 2,
+  "True Damage": 2,
+  "Big Shot": 2,
+  "Brawler": 2,
+  "Crowd Diver": 2,
+  "Dazzler": 2,
+  "Edgelord": 3,
+  "Executioner": 2,
+  "Guardian": 2,
+  "Mosher": 2,
+  "Rapidfire": 2,
+  "Sentinel": 2,
+  "Spellweaver": 3,
+  "Superfan": 3,
+  "Jazz": 2,
+  "Hyperpop": 1
+}
