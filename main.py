@@ -27,17 +27,18 @@ class ChampionGrid:
     def champion_click(self, champ):
         self.team.append(champ)
         count, traits = logic.evaluate_team(self.team, activation_thresholds)
-        current = format_team_info([self.team], count)
+        header = f"Team has {len(self.team)} Units\n"
+        current = format_team_info([self.team], count, header)
         update_current_team(current)
 
     def clear_team(self):
         self.team = []
         update_current_team("")
 
-def format_team_info(best_teams, max_activated):
-    info_str = f"There are {len(best_teams)} teams with {max_activated} traits activated\n\n"
+def format_team_info(best_teams, max_activated, header):
+    info_str = header
     for i, team in enumerate(best_teams):
-        info_str += f'Team: {i+1} Activates: {max_activated} traits\n'
+        info_str +=  f'Team: {i+1} Activates: {max_activated} traits\n'
         for champ in team:
             info_str += f"{champ.name:12} ({champ.cost}) (Traits: {', '.join(champ.traits)})\n"
         info_str += "\n"
@@ -59,8 +60,10 @@ def get_team_size(champion_grid):
     filtered_champions = logic.filter_by_cost(logic.champions, selected_costs)
     best_teams, traits, max_activated = logic.brute_force_solution2(
         filtered_champions, activation_thresholds, team_size, champion_grid.team)
-    info_str = format_team_info(best_teams, max_activated)
+    header = f"There are {len(best_teams)} Teams that Activate {max_activated} Traits\n\n"
+    info_str = format_team_info(best_teams, max_activated, header)
     update_output(info_str)
+
 
 
 #GUI Layout
@@ -70,7 +73,7 @@ root.title("Team Builder")
 #How many units are on the team
 label = tk.Label(text='Set Max Team Size:')
 label.pack()
-team_size_slider = tk.Scale(root, from_=3, to=10, orient='horizontal', length =200)
+team_size_slider = tk.Scale(root, from_=1, to=10, orient='horizontal', length =200)
 team_size_slider.pack()
 
 #Determines which unit costs to include
