@@ -1,10 +1,13 @@
-# JazzCalc
- TFT Team Composition Tool
+JazzCalc: A TFT Team Composition Tool
 
-# Using this program
- -0 Run Main
- -1 Click buttons to add units to your team
- -2 Use Slider to set team size
- -3 Calculate all possible team combinations to maximize "Activated Traits"
- ** Calculation is brute force and time complexity increases (10x) exponentially for each open team slot **
- 
+Getting Started with JazzCalc
+
+Step-by-Step Guide:
+
+Launch the Program: Start by running the Main script. This is your gateway to exploring optimal team compositions in TFT.
+Build Your Team: Click on buttons to add your favorite units to your team. Feel free to experiment with different combinations!
+Set Team Size: Adjust the team size to your preference using the convenient slider. This flexibility allows you to plan for different stages of the game.
+Compute Combinations: Hit 'Calculate' to generate all possible team compositions. JazzCalc will work its magic to find setups that maximize "Activated Traits" for strategic superiority.
+Important Note on Calculation Process:
+
+JazzCalc uses a brute force algorithm to calculate team combinations. Keep in mind that the time complexity increases exponentially (by approximately 10x) with each additional open team slot. This means that the more slots you have to fill, the longer the calculation will take. Plan accordingly, especially when working with larger team sizes to ensure a smooth experience.
