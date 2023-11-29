@@ -2,7 +2,7 @@
 import itertools
 import json
 
-#Champion class with name and traits
+# Champion class with name and traits
 class Champion:
   def __init__(self, name, traits, cost):
     self.name = name
@@ -12,21 +12,21 @@ class Champion:
   def __repr__(self):
     return f"Champion(name={self.name}, traits={self.traits}, cost={self.cost})"
 
-#Read and parse JSON file
+# Read and parse JSON file
 with open('champions.json', 'r') as file:
   data = json.load(file)
 
-#Creat the list of champions
+# Creat the list of champions
 champions = [
   Champion(champ['name'], 
            champ['traits'], 
            champ['cost']) for champ in data]
 
-#Filter champions by their cost
+# Filter champions by their cost
 def filter_by_cost(champions, allowed_costs):
   return [champ for champ in champions if champ.cost in allowed_costs]
   
-#Checks team and returns the number of traits activated and the set of activated traits
+# Checks team and returns the number of traits activated and the set of activated traits
 def evaluate_team(team, activation_thresholds):
     trait_counts = {}
     for champion in team:
@@ -40,7 +40,7 @@ def evaluate_team(team, activation_thresholds):
 
     return len(activated_traits), activated_traits
 
-#Checks all team variations and creates a list of solutions that activate the most traits 
+# Checks all team variations and creates a list of solutions that activate the most traits 
 def brute_force_solution2(champions, activation_thresholds, team_size, mandatory_champs=[]):
   best_teams = []
   best_team_traits = set()
