@@ -27,12 +27,19 @@ def filter_by_cost(champions, allowed_costs):
   return [champ for champ in champions if champ.cost in allowed_costs]
   
 # Checks team and returns the number of traits activated and the set of activated traits
-def evaluate_team(team, activation_thresholds):
+def evaluate_team(team, activation_thresholds, headliner_trait=None):
     trait_counts = {}
+
+    # Counting traits from team
     for champion in team:
         for trait in champion.traits:
             trait_counts[trait] = trait_counts.get(trait, 0) + 1
 
+    # Adding +1 to the headliner trait, if selected
+    if headliner_trait and headliner_trait in trait_counts:
+        trait_counts[headliner_trait] += 1
+
+    # Identifying activated traits
     activated_traits = {
         trait for trait in trait_counts 
         if trait in activation_thresholds and trait_counts[trait] >= activation_thresholds[trait]
@@ -40,8 +47,9 @@ def evaluate_team(team, activation_thresholds):
 
     return len(activated_traits), activated_traits
 
+
 # Checks all team variations and creates a list of solutions that activate the most traits 
-def brute_force_solution2(champions, activation_thresholds, team_size, mandatory_champs=[]):
+def brute_force_solution2(champions, activation_thresholds, team_size, headliner_trait, mandatory_champs=[]):
   best_teams = []
   best_team_traits = set()
   max_activated = 0
@@ -53,7 +61,7 @@ def brute_force_solution2(champions, activation_thresholds, team_size, mandatory
   for team_combination in itertools.combinations(remaining_champs, remaining_slots):
       # Add mandatory champions to the team
       team = mandatory_champs + list(team_combination)
-      activated, traits = evaluate_team(team, activation_thresholds)
+      activated, traits = evaluate_team(team, activation_thresholds, headliner_trait)
   
       if activated > max_activated:
           max_activated = activated
