@@ -25,7 +25,7 @@ class ChampionGrid:
     # Updates Current Team Text Window after clicking Champion button
     def champion_click(self, champ):
         self.team.append(champ) # Adds champion to current team
-        count, traits = logic.evaluate_team(self.team, activation_thresholds)
+        count, traits = logic.evaluate_team(self.team, activation_thresholds, selected_option.get())
         header = f"Team has {len(self.team)} Units\n"
         current = format_team_info([self.team], count, header)
         update_output(current, current_team)
@@ -81,14 +81,17 @@ class ChampionGrid:
                 self.buttons[i].config(bg='grey')  # Grey out if no match is found
 
 # Takes List of teams and formats strings for output
-def format_team_info(best_teams, max_activated, header):
-    info_str = header # Used slightly diff in current_team and output_text :/
+def format_team_info(best_teams, max_activated, header, headliner_trait=None):
+    info_str = header
     for i, team in enumerate(best_teams):
-        info_str +=  f'Team: {i+1} Activates: {max_activated} traits\n'
+        info_str += f'Team: {i+1} Activates: {max_activated} traits\n'
         for champ in team:
-            info_str += f"{champ.name:12} ({champ.cost}) (Traits: {', '.join(champ.traits)})\n"
+            # Append an asterisk to headliner trait
+            traits_with_asterisk = [trait + ('**' if trait == headliner_trait else '') for trait in champ.traits]
+            info_str += f"{champ.name:12} ({champ.cost}) (Traits: {', '.join(traits_with_asterisk)})\n"
         info_str += "\n"
     return info_str
+
 
 # Takes some string and writes it to a specified text box
 def update_output(info, endpoint):
@@ -99,6 +102,7 @@ def update_output(info, endpoint):
 # 
 def calculate_best_teams(champion_grid):
     # Gets max team size from slider
+    headliner_trait = selected_option.get()
     team_size = team_size_slider.get()
     # Gets allowed Champion costs from check boxes
     selected_costs = [cost for cost, var in cost_vars.items() if var.get() == 1]
@@ -107,11 +111,11 @@ def calculate_best_teams(champion_grid):
 
     # Calls Function to check for number of activated traits
     best_teams, traits, max_activated = logic.brute_force_solution2(
-        filtered_champions, activation_thresholds, team_size, champion_grid.team)
+        filtered_champions, activation_thresholds, team_size, selected_option.get(), champion_grid.team)
 
     # Updates output_text with team(s) 
     header = f"There are {len(best_teams)} Teams that Activate {max_activated} Traits\n\n"
-    info_str = format_team_info(best_teams, max_activated, header)
+    info_str = format_team_info(best_teams, max_activated, header, selected_option.get())
     update_output(info_str, output_text)
 
 
@@ -128,6 +132,21 @@ label.pack()
 team_size_slider = tk.Scale(root, from_=1, to=12, orient='horizontal', length =200)
 team_size_slider.set(7)
 team_size_slider.pack()
+
+# Create a frame for the dropdown and label
+dropdown_frame = tk.Frame(root)
+dropdown_frame.pack()
+
+# Create and pack the label to the left in the frame
+headliner_label = tk.Label(dropdown_frame, text="Headliner Trait:")
+headliner_label.pack(side=tk.LEFT)
+
+# Create and pack the dropdown menu to the right of the label in the frame
+selected_option = tk.StringVar(root)
+headliner_options = list(activation_thresholds.keys())
+selected_option.set(headliner_options[0])
+headliner_trait = tk.OptionMenu(dropdown_frame, selected_option, *headliner_options)
+headliner_trait.pack(side=tk.LEFT)
 
 # Creates check boxes that are used for filtering what champion costs to include
 cost_label = tk.Label(text = 'Include Costs:')
